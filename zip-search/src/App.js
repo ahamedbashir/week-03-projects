@@ -5,8 +5,16 @@ import { async } from 'q';
 
 
 function City(props) {
+  const cities = props.cities;
+  console.log(cities)
   return (<div>
-    {props.getCities}
+    <h1>{cities.City}, {cities.State}</h1>
+    <ul>
+      <li>State: {cities.State}</li>
+      <li>Location: {cities.Lat}, {cities.Long}</li>
+      <li>Population: {cities.EstimatedPopulation}</li>
+      <li>Total Wages: {cities.TotalWages}</li>
+    </ul>
   </div>);
 }
 
@@ -26,15 +34,19 @@ class App extends Component {
   }
 
   getZipCode = async (zip) => {
-    
-    console.log(zip);
-    if(zip.length === 5) {
+    // if(zip.length === 5) {
       this.setState({zipCode: zip});
       const response = await fetch("http://ctp-zip-api.herokuapp.com/zip/" + zip);
-      const cities = await response.json();
-      console.log(cities);
-      this.setState({cities: cities})
-    }
+      if(response.status !== 200) {
+        console.log("No results")
+      }
+      else {
+        const cities = await response.json();
+        console.log("cities", cities);
+        this.setState({cities: cities})
+      }
+      
+    // }
   }
   getCities = async () => {
     const response = await fetch("http://ctp-zip-api.herokuapp.com/zip/" + this.state.zipCode);
@@ -49,11 +61,15 @@ class App extends Component {
           <h2>Zip Code Search</h2>
         </div>
         <ZipSearchField getZipCode = {this.getZipCode}/>
-        <div>
-          <City  getCities = {this.getCities}/>
-          <City />
-        </div>
-      </div>
+        {this.state.cities?
+          <div>
+            {this.state.cities.map(city => {
+              return <City cities = {city}/>
+              })}
+          </div>
+          : null
+        }
+    </div>
     );
   }
 }
