@@ -4,23 +4,24 @@ import './App.css';
 
 
 function ZipCode(props) {
-  // const cities = props.cities;
-  // console.log(cities)
-  // return (
-  // <div>
-  //   <h1>{cities.City}, {cities.State}</h1>
-  //   <ul>
-  //     <li>State: {cities.State}</li>
-  //     <li>Location: {cities.Lat}, {cities.Long}</li>
-  //     <li>Population: {cities.EstimatedPopulation}</li>
-  //     <li>Total Wages: {cities.TotalWages}</li>
-  //   </ul>
+  const zipCodes = props.zipCodes;
+  console.log(zipCodes)
+  return (
+  <div>
+    {zipCodes}
+    {/* <h1>{cities.City}, {cities.State}</h1>
+    <ul>
+      <li>State: {cities.State}</li>
+      <li>Location: {cities.Lat}, {cities.Long}</li>
+      <li>Population: {cities.EstimatedPopulation}</li>
+      <li>Total Wages: {cities.TotalWages}</li>
+    </ul> */}
   </div>);
 }
 
 function CitySearchField(props) {
   return (<div>
-    Zip Code: <input type="text" onChange = {(event) => props.getCities(event.target.value)} placeholder = "Try NY"></input>
+    City: <input type="text" value = {props.city} onChange = {(event) => props.getZipCodes(event.target.value.toUpperCase())} placeholder = "Try NY"></input>
   </div>);
 }
 
@@ -49,11 +50,11 @@ class App extends Component {
         <div className="App-header">
           <h2>City Search</h2>
         </div>
-        <CitySearchField getCities= {this.getCities}/>
+        <CitySearchField getZipCodes= {this.getZipCodes} city = {this.state.city}/>
         {this.state.zipCodes?
           <div>
-            {this.state.cities.map(city => {
-              return <City cities = {city}/>
+            {this.state.zipCodes.map(zip => {
+              return <ZipCode zipCodes= {zip}/>
               })
             }
           </div>
