@@ -5,11 +5,13 @@ import {Card} from 'react-bootstrap';
 
 
 function ZipCode(props) {
-  const zipCodes = props.zipCodes;
-  console.log(zipCodes)
+  const zipCode = props.zipCode;
+  // const cities = props.getCities(zipCode);
+  // console.log(cities);
+  console.log(zipCode)
   return (
   <div className = "mt-4">
-    {zipCodes}
+    {zipCode}
   </div>);
 }
 
@@ -44,7 +46,8 @@ function CitySearchField(props) {
 class App extends Component {
   state = {
     city: "",
-    zipCodes: ""
+    zipCodes: "",
+    cities: ""
   }
 
   getZipCodes = async (city) => {
@@ -59,6 +62,24 @@ class App extends Component {
         this.setState({zipCodes: zipCodes})
       }
   }
+
+  getCities = async (zip) => {
+    this.setState({cities: ""});
+    if(zip.length === 5) {
+      this.setState({zipCode: zip, cities: ""});
+      const response = await fetch("http://ctp-zip-api.herokuapp.com/zip/" + zip);
+      if(response.status !== 200) {
+        console.log("No results")
+      }
+      else {
+        const cities = await response.json();
+        // console.log("cities", cities);
+        this.setState({cities: cities})
+      }
+      
+    }
+  }
+
   render() {
     return (
       <div className="App">
@@ -69,7 +90,7 @@ class App extends Component {
         {this.state.zipCodes?
           <div className = "body">
             {this.state.zipCodes.map(zip => {
-              return <ZipCode zipCodes= {zip}/>
+              return <ZipCode zipCode= {zip} getCities = {this.getCities}/>
               })
             }
           </div>
