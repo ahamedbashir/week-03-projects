@@ -1,27 +1,42 @@
 import React, {Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import {Card} from 'react-bootstrap';
 
 
 function ZipCode(props) {
   const zipCodes = props.zipCodes;
   console.log(zipCodes)
   return (
-  <div>
+  <div className = "mt-4">
     {zipCodes}
-    {/* <h1>{cities.City}, {cities.State}</h1>
+  </div>);
+}
+
+
+function City(props) {
+  const cities = props.cities;
+  console.log(cities)
+  return (
+  <div className = "mt-4">
+    <Card style={{width: '25rem'}}>
+    <Card.Header>{cities.City}, {cities.State}</Card.Header>
+    <Card.Body>
     <ul>
       <li>State: {cities.State}</li>
-      <li>Location: {cities.Lat}, {cities.Long}</li>
-      <li>Population: {cities.EstimatedPopulation}</li>
+      <li>Location: ({cities.Lat}, {cities.Long})</li>
+      <li>Population (estimated): {cities.EstimatedPopulation}</li>
       <li>Total Wages: {cities.TotalWages}</li>
-    </ul> */}
+    </ul>
+    </Card.Body>
+    </Card>  
   </div>);
 }
 
 function CitySearchField(props) {
-  return (<div>
-    City: <input type="text" value = {props.city} onChange = {(event) => props.getZipCodes(event.target.value.toUpperCase())} placeholder = "Try NY"></input>
+  return (<div  className = "body form-inline body row mt-3" style={{fontWeight: "bold"}}>
+    <div style={{width: '25rem'}}> City Name: <input type="text" className="form-control form-inline" value = {props.city} onChange = {(event) => props.getZipCodes(event.target.value.toUpperCase())} placeholder = "Try NY"></input></div>
+  
   </div>);
 }
 
@@ -52,13 +67,16 @@ class App extends Component {
         </div>
         <CitySearchField getZipCodes= {this.getZipCodes} city = {this.state.city}/>
         {this.state.zipCodes?
-          <div>
+          <div className = "body">
             {this.state.zipCodes.map(zip => {
               return <ZipCode zipCodes= {zip}/>
               })
             }
           </div>
-          : <div>No Results</div>
+          :
+          <div className = "body mt-3">
+            <div style={{width: '25rem'}}>No Results</div>
+          </div>
         }
     </div>
     );
